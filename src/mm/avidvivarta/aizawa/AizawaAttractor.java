@@ -4,7 +4,7 @@ import mm.avidvivarta.renderer.point.Point3D;
 
 public class AizawaAttractor {
 
-	private double dt = 0.005;
+	private double dt = 0.1;
 	private Point3D point3d;
 	private double timer = 0;
 
@@ -33,6 +33,13 @@ public class AizawaAttractor {
 	public AizawaAttractor() {
 
 		this.point3d = new Point3D(0.1, 0, 0);
+
+	}
+
+	public AizawaAttractor(double dt) {
+
+		this.point3d = new Point3D(0.1, 0, 0);
+		this.dt = dt;
 
 	}
 
@@ -91,6 +98,12 @@ public class AizawaAttractor {
 	public void setTransform(Transform<Point3D> transform) {
 
 		this.transform = transform;
+
+	}
+
+	public void setDt(double dt) {
+
+		this.dt = dt;
 
 	}
 

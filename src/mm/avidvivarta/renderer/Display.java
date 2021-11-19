@@ -4,19 +4,24 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
 import mm.avidvivarta.aizawa.AizawaAttractor;
 import mm.avidvivarta.renderer.graphics.Screen;
+import mm.avidvivarta.renderer.point.Point3D;
+import mm.avidvivarta.renderer.point.PointConverter;
 
 public class Display extends Canvas implements Runnable {
 
 	private static final long serialVersionUID = 1L;
 
 	public static double aspectRatio = 5 / 4;
-	public static int width = 600;
+	public static int width = 900;
 	public static int height = (int) (width / aspectRatio);
 	public static final String TITLE = "Aizawa Attractor";
 	public static int scale = 1;
@@ -24,6 +29,9 @@ public class Display extends Canvas implements Runnable {
 	private static boolean running = false;
 
 	private int xUpdate = 0, yUpdate = 0;
+
+	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 
 	private Thread thread;
 	private JFrame frame;
@@ -42,7 +50,8 @@ public class Display extends Canvas implements Runnable {
 
 		this.frame = new JFrame();
 		this.screen = new Screen(this.width, this.height);
-		this.aa = new AizawaAttractor();
+		this.aa = new AizawaAttractor(0.1);
+
 	}
 
 	public synchronized void start() {
@@ -105,6 +114,13 @@ public class Display extends Canvas implements Runnable {
 
 	private void update() {
 
+		Point3D point3d = this.aa.iterate();
+		Point p = PointConverter.convertPoint(point3d);
+		this.xUpdate = (int) p.getX();
+		this.yUpdate = (int) p.getY();
+		System.out.println("x update: " + this.xUpdate + ", y update: " + this.yUpdate + ", time: "
+				+ this.aa.getLapsedTime() + ", point3d: " + this.aa.getCurrentLocation().toString());
+
 	}
 
 	private void render() {
@@ -113,8 +129,15 @@ public class Display extends Canvas implements Runnable {
 		if (bs == null) { this.createBufferStrategy(3); return; }
 		Graphics g = bs.getDrawGraphics();
 
+		int[] pixelValues = screen.renderAizawaPoint(xUpdate, yUpdate);
+		for (int i = 0; i < this.pixels.length; i++) {
+			this.pixels[i] = pixelValues[i];
+		}
+
 		g.setColor(Color.black);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+		g.drawImage(this.image, 0, 0, this.getWidth(), this.getHeight(), null);
 
 		g.dispose();
 		bs.show();
