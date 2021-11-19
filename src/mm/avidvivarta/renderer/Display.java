@@ -8,7 +8,6 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.util.Arrays;
 
 import javax.swing.JFrame;
 
@@ -51,7 +50,7 @@ public class Display extends Canvas implements Runnable {
 
 		this.frame = new JFrame();
 		this.screen = new Screen(Display.width, Display.height);
-		this.aa = new AizawaAttractor(0.1);
+		this.aa = new AizawaAttractor(0.01);
 
 	}
 
@@ -102,6 +101,7 @@ public class Display extends Canvas implements Runnable {
 				updates = 0;
 			}
 		}
+		this.stop();
 
 
 
@@ -131,7 +131,9 @@ public class Display extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 
 		int[] pixelValues = screen.renderAizawaPoint(xUpdate, yUpdate);
-		this.pixels = Arrays.copyOf(pixelValues, pixels.length);
+		for (int i = 0; i < this.pixels.length; i++) {
+			this.pixels[i] = pixelValues[i];
+		}
 
 		g.setColor(Color.black);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
