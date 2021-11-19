@@ -117,7 +117,7 @@ public class Display extends Canvas implements Runnable {
 	private void update() {
 
 		Point3D point3d = this.aa.iterate();
-		Point p = PointConverter.convertPointZLeft(point3d);
+		Point p = PointConverter.convertPoint(point3d);
 		this.xUpdate = (int) p.getX();
 		this.yUpdate = (int) p.getY();
 		System.out.println("x update: " + this.xUpdate + ", y update: " + this.yUpdate + ", time: "
