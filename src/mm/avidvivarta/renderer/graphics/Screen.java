@@ -52,6 +52,7 @@ public class Screen {
 
 	public int[] renderAizawaPoint(int xUpdate, int yUpdate) {
 
+
 		long timeNow = System.currentTimeMillis();
 		if (timeNow - initialTime >= 1000) { initialTime = timeNow; tileIndex = ++tileIndex % this.tiles.length; }
 		for (int y = 0; y < this.height; y++) {

@@ -8,6 +8,7 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.Arrays;
 
 import javax.swing.JFrame;
 
@@ -21,12 +22,12 @@ public class Display extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static double aspectRatio = 5 / 4;
-	public static int width = 900;
+	public static int width = 400;
 	public static int height = (int) (width / aspectRatio);
 	public static final String TITLE = "Aizawa Attractor";
 	public static int scale = 1;
 
-	private static boolean running = false;
+	private boolean running = false;
 
 	private int xUpdate = 0, yUpdate = 0;
 
@@ -40,7 +41,7 @@ public class Display extends Canvas implements Runnable {
 
 	public Display() {
 
-		Dimension size = new Dimension(this.width * this.scale, this.height * this.scale);
+		Dimension size = new Dimension(Display.width * Display.scale, Display.height * Display.scale);
 		this.setPreferredSize(size);
 		this.init();
 
@@ -49,7 +50,7 @@ public class Display extends Canvas implements Runnable {
 	private void init() {
 
 		this.frame = new JFrame();
-		this.screen = new Screen(this.width, this.height);
+		this.screen = new Screen(Display.width, Display.height);
 		this.aa = new AizawaAttractor(0.1);
 
 	}
@@ -130,9 +131,7 @@ public class Display extends Canvas implements Runnable {
 		Graphics g = bs.getDrawGraphics();
 
 		int[] pixelValues = screen.renderAizawaPoint(xUpdate, yUpdate);
-		for (int i = 0; i < this.pixels.length; i++) {
-			this.pixels[i] = pixelValues[i];
-		}
+		this.pixels = Arrays.copyOf(pixelValues, pixels.length);
 
 		g.setColor(Color.black);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
