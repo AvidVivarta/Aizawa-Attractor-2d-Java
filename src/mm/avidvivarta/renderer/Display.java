@@ -21,10 +21,10 @@ public class Display extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 
 	public static double aspectRatio = 5 / 4;
-	public static int width = 400;
+	public static int width = 200;
 	public static int height = (int) (width / aspectRatio);
 	public static final String TITLE = "Aizawa Attractor";
-	public static int scale = 1;
+	public static int scale = 2;
 
 	private boolean running = false;
 
@@ -50,7 +50,8 @@ public class Display extends Canvas implements Runnable {
 
 		this.frame = new JFrame();
 		this.screen = new Screen(Display.width, Display.height);
-		this.aa = new AizawaAttractor(0.01);
+		Point3D new3dPoint = new Point3D(0.1, 0.0, 0);
+		this.aa = new AizawaAttractor(new3dPoint, 0.01);
 
 	}
 
@@ -116,7 +117,7 @@ public class Display extends Canvas implements Runnable {
 	private void update() {
 
 		Point3D point3d = this.aa.iterate();
-		Point p = PointConverter.convertPoint(point3d);
+		Point p = PointConverter.convertPointZLeft(point3d);
 		this.xUpdate = (int) p.getX();
 		this.yUpdate = (int) p.getY();
 		System.out.println("x update: " + this.xUpdate + ", y update: " + this.yUpdate + ", time: "
